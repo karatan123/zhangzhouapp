@@ -35,8 +35,8 @@ class RfiddmanagementTest(unittest.TestCase):
         desired_caps['platformName'] = 'Android'
         desired_caps['platformVersion'] = '5.1'
         desired_caps['automationName'] = 'uiautomator2'
-        desired_caps['deviceName'] = 'YDEQORZHB6OR8SMV'
-        desired_caps['app'] = os.path.abspath('/Users/kara/Downloads/pda5.66.apk')
+        desired_caps['deviceName'] = '0123456789ABCDEF'
+        desired_caps['app'] = os.path.abspath('/Users/kara/Downloads/apps_1551929344465-zhangZhouRecycling3.4_release.apk')
         desired_caps['appActivity'] = '.commissioner.auth.CommissionerLoginActivity'
         desired_caps['appPackage'] = 'com.locision.recycling'
 

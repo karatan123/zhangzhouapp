@@ -33,12 +33,19 @@ class LoginTest(unittest.TestCase):
         desired_caps['platformName'] = 'Android'
         desired_caps['platformVersion'] = '5.1'
         desired_caps['automationName'] = 'uiautomator2'
-        desired_caps['deviceName'] = 'YDEQORZHB6OR8SMV'
-        desired_caps['app'] = os.path.abspath('/Users/kara/Downloads/pda5.66.apk')
+        desired_caps['deviceName'] = '0123456789ABCDEF'
+        desired_caps['app'] = os.path.abspath('/Users/kara/Downloads/apps_1551929344465-zhangZhouRecycling3.4_release.apk')
         desired_caps['appActivity'] = '.commissioner.auth.CommissionerLoginActivity'
         desired_caps['appPackage'] = 'com.locision.recycling'
 
         self.driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+    def isElementExist(self, css):
+        try:
+            self.driver.find_element_by_xpath(css)
+            return True
+        except:
+            return False
 
     # 封装登录函数
     def login(self, username, password):
@@ -52,12 +59,11 @@ class LoginTest(unittest.TestCase):
         self.login('zhangzhou1012','123456')
         # 截屏
         self.driver.get_screenshot_as_file("/Users/kara/zhangzhouapp/screenshot/login_success.jpg")
-        # 获取toast
-        toast_loc = ("xpath", ".//*[contains(@text,'登录成功')]")
-        massage = WebDriverWait(self.driver, 20, 0.0001).until(EC.presence_of_element_located(toast_loc))
-        self.assertEqual(massage.text, "登录成功")
+        time.sleep(10)
+        massage = self.isElementExist("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.RelativeLayout[2]/android.widget.TextView[2]")
+        self.assertEqual(massage, True)
         # 退出
-        self.find_element_by_id("com.locision.recycling:id/btn_logout").click()
+        self.driver.find_element_by_id("com.locision.recycling:id/btn_logout").click()
         time.sleep(5)
 
         # 获取toast
@@ -69,24 +75,30 @@ class LoginTest(unittest.TestCase):
         # poll_frequency：循环去查询的间隙时间，默认0.5秒
     def test_login_wrong_role(self):
         self.login('zhangzhou1007', '123456')
-        toast_loc1 = ("xpath", ".//*[contains(@text,'请求失败')]")
-
-        massage1 = WebDriverWait(self.driver, 20, 0.0001).until(EC.presence_of_element_located(toast_loc1))
-        self.assertEqual(massage1.text, "请求失败，请联系管理员")
+        time.sleep(10)
+        message = self.isElementExist("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.TextView[1]")
+        self.assertEqual(message, True)
 
     def test_login_error_password(self):
         self.login('zhangzhou1012', 'cxb37588')
-        toast_loc2 = ("xpath", ".//*[contains(@text,'请求失败')]")
-        massage2 = WebDriverWait(self.driver, 20, 0.0001).until(EC.presence_of_element_located(toast_loc2))
-        self.assertEqual(massage2.text, "请求失败，请联系管理员")
+        time.sleep(10)
+        message = self.isElementExist(
+            "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.TextView[1]")
+        self.assertEqual(message, True)
 
     def test_login_error_username(self):
         self.login('kara', '123456')
-        toast_loc3 = ("xpath", ".//*[contains(@text,'请求失败')]")
-        massage3 = WebDriverWait(self.driver, 20, 0.0001).until(EC.presence_of_element_located(toast_loc3))
-        self.assertEqual(massage3.text, "请求失败，请联系管理员")
+        time.sleep(10)
+        message = self.isElementExist(
+            "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.TextView[1]")
+        self.assertEqual(message, True)
 
     def tearDown(self):
         time.sleep(2)
         print('自动测试完毕！')
         self.driver.quit()
+
+
+# 运行单个python文件会需要
+if __name__ == "__main__":
+    unittest.main()

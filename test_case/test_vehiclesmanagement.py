@@ -35,8 +35,8 @@ class VehiclesmanagementTest(unittest.TestCase):
         desired_caps['platformName'] = 'Android'
         desired_caps['platformVersion'] = '5.1'
         desired_caps['automationName'] = 'uiautomator2'
-        desired_caps['deviceName'] = 'YDEQORZHB6OR8SMV'
-        desired_caps['app'] = os.path.abspath('/Users/kara/Downloads/pda5.66.apk')
+        desired_caps['deviceName'] = '0123456789ABCDEF'
+        desired_caps['app'] = os.path.abspath('/Users/kara/Downloads/apps_1551929344465-zhangZhouRecycling3.4_release.apk')
         desired_caps['appActivity'] = '.commissioner.auth.CommissionerLoginActivity'
         desired_caps['appPackage'] = 'com.locision.recycling'
 
@@ -47,34 +47,19 @@ class VehiclesmanagementTest(unittest.TestCase):
         self.driver.find_element_by_id("com.locision.recycling:id/btn_login").click()
         time.sleep(5)
 
-    #     封装函数判断某元素是否存在
-    def is_notexist_element(self):
-        searchelement = ("xpath", "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.support.v7.widget.RecyclerView/android.widget.RelativeLayout[1]/android.widget.TextView"
-                         )
-        massage = WebDriverWait(self.driver, 20, 0.1).until(EC.invisibility_of_element_located(searchelement))
-        if massage == True:
+    #   进入车辆列表页面
+        self.driver.find_element_by_xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.view.View/android.widget.LinearLayout[2]/android.widget.ImageView").click()
+        time.sleep(5)
+
+        # 判断元素是否存在
+    def isElementExist(self, css):
+        try:
+            self.driver.find_element_by_id(css)
             return True
-        else:
+        except:
             return False
 
-    # 车辆管理划到最后一页没有toast
-    '''def test_vehiclemangement_swip(self):
-        view1 = self.driver.find_element_by_xpath(
-            "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.view.View/android.widget.LinearLayout[2]/android.widget.ImageView"
-        )
-        view1.click()
-        time.sleep(5)
-        TouchAction(self.driver).press(x=662, y=1770).wait(100).move_to(x=708, y=983).release().perform()
-    #    获取toast    未捕捉到
-        toast_loc1 = ("xpath", ".//*[contains(@text,'已是最后一页')]")
-        massage1 = WebDriverWait(self.driver, 20, 0.0001).until(EC.presence_of_element_located(toast_loc1))
-        self.assertEqual(massage1.text, '已是最后一页')'''
-
     def test_vehiclesmanagement_existsearch(self):
-        view1 = self.driver.find_element_by_xpath(
-            "/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.view.View/android.widget.LinearLayout[2]/android.widget.ImageView"
-        )
-        view1.click()
         self.driver.find_element_by_id("com.locision.recycling:id/iv_search").click()
         searchinput = self.driver.find_element_by_id("com.locision.recycling:id/et_search")
         searchinput.send_keys("闽Y88888")
@@ -87,7 +72,7 @@ class VehiclesmanagementTest(unittest.TestCase):
     def test_vehiclemanagement_notexistsearch(self):
         self.driver.find_element_by_id("com.locision.recycling:id/et_search").send_keys("12121")
     #     判断某个元素不存在
-        self.assertTrue(self.is_notexist_element())
+        self.assertFalse(self.isElementExist("com.locision.recycling:id/tv_name"))
 
 
 
@@ -96,3 +81,8 @@ class VehiclesmanagementTest(unittest.TestCase):
         time.sleep(2)
         print('自动测试完毕！')
         self.driver.quit()
+
+
+# 运行单个python文件会需要
+if __name__ == "__main__":
+    unittest.main()
